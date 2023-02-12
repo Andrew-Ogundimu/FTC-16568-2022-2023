@@ -16,6 +16,7 @@ public class Teleop extends OpMode {
     private DcMotor bl = null;
     private DcMotor br = null;
     private DcMotor xrail = null;
+    private float speed = 1;
 
     private DcMotor lift = null;
     private DcMotor lift2 = null;
@@ -43,6 +44,7 @@ public class Teleop extends OpMode {
         lift.setDirection(DcMotor.Direction.FORWARD);
         lift2.setDirection(DcMotor.Direction.FORWARD);
         telemetry.addData("Status","Initialized");
+        telemetry.addData("Current Speed",speed);
     }
     public void init_loop() {
 
@@ -57,10 +59,10 @@ public class Teleop extends OpMode {
 
         float[] move_vec = new float[]{gamepad1.left_stick_x,gamepad1.left_stick_y};
         float[] r = rotate(move_vec,-45); //rotate the movement vector by 45 degrees
-        bl.setPower(r[0]);
-        fr.setPower(r[0]);
-        fl.setPower(r[1]);
-        br.setPower(r[1]);
+        bl.setPower(r[0]*speed);
+        fr.setPower(r[0]*speed);
+        fl.setPower(r[1]*speed);
+        br.setPower(r[1]*speed);
         if (gamepad1.left_bumper){
             xrail.setPower(1.0f);
         } else if (gamepad1.left_trigger>0) {
@@ -69,20 +71,20 @@ public class Teleop extends OpMode {
             xrail.setPower(0.0f);
         }
         if (gamepad1.right_stick_x!=0) {
-            bl.setPower(gamepad1.right_stick_x);
-            fr.setPower(-gamepad1.right_stick_x);
-            fl.setPower(gamepad1.right_stick_x);
-            br.setPower(-gamepad1.right_stick_x);
+            bl.setPower(-gamepad1.right_stick_x*speed);
+            fr.setPower(gamepad1.right_stick_x*speed);
+            fl.setPower(-gamepad1.right_stick_x*speed);
+            br.setPower(gamepad1.right_stick_x*speed);
         }
         if (gamepad1.dpad_up) {
-            lift.setPower(1.0f);
-            lift2.setPower(1.0f);
+            if (speed<1) {
+                speed += 0.1;
+            telemetry.addData("Current Speed",speed);
         } else if (gamepad1.dpad_down) {
-            lift.setPower(-1.0f);
-            lift2.setPower(-1.0f);
-        } else {
-            lift.setPower(0.0f);
-            lift2.setPower(0.0f);
+            if (speed>0.2) {
+                speed -= 0.1;    
+            }
+            telemetry.addData("Current Speed",speed);
         }
 
         if (gamepad1.b) {

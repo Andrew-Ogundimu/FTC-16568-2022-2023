@@ -81,6 +81,7 @@ public class Teleop extends OpMode {
         if (gamepad1.y!=change_y && gamepad1.y) {
             if (speed<1) {
                 speed += 0.1f;
+            }
             telemetry.addData("Current Speed",speed);
         } else if (gamepad1.x!=change_x && gamepad1.x) {
             if (speed>0.3) {

@@ -17,6 +17,8 @@ public class Teleop extends OpMode {
     private DcMotor br = null;
     private DcMotor xrail = null;
     private float speed = 1;
+    private boolean change_x = false;
+    private boolean change_y = false;
 
     private DcMotor lift = null;
     private DcMotor lift2 = null;
@@ -76,13 +78,13 @@ public class Teleop extends OpMode {
             fl.setPower(-gamepad1.right_stick_x*speed);
             br.setPower(gamepad1.right_stick_x*speed);
         }
-        if (gamepad1.dpad_up) {
+        if (gamepad1.y!=change_y && gamepad1.y) {
             if (speed<1) {
-                speed += 0.1;
+                speed += 0.1f;
             telemetry.addData("Current Speed",speed);
-        } else if (gamepad1.dpad_down) {
-            if (speed>0.2) {
-                speed -= 0.1;    
+        } else if (gamepad1.x!=change_x && gamepad1.x) {
+            if (speed>0.3) {
+                speed -= 0.1f;    
             }
             telemetry.addData("Current Speed",speed);
         }
@@ -94,7 +96,9 @@ public class Teleop extends OpMode {
             hook.setPosition(0);
             telemetry.addData("Servo Position:", hook.getPosition());
         }
-
+        
+        change_x = gamepad1.x;
+        change_y = gamepad1.y;
     }
 
 }

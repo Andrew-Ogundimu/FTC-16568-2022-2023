@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
@@ -21,6 +21,7 @@ public class Teleop extends OpMode {
     private DcMotor lift2 = null;
 
     private Servo claw = null;
+    private Servo hook = null;
     public void init() {
 
         fl  = hardwareMap.get(DcMotor.class, "fl");
@@ -32,10 +33,12 @@ public class Teleop extends OpMode {
         lift2 = hardwareMap.get(DcMotor.class, "lift2");
         claw = hardwareMap.get(Servo.class, "claw");
 
-        fl.setDirection(DcMotor.Direction.REVERSE);
-        bl.setDirection(DcMotor.Direction.REVERSE);
-        fr.setDirection(DcMotor.Direction.FORWARD);
-        br.setDirection(DcMotor.Direction.FORWARD);
+        hook = hardwareMap.get(Servo.class, "hook");
+
+        fl.setDirection(DcMotor.Direction.FORWARD);
+        bl.setDirection(DcMotor.Direction.FORWARD);
+        fr.setDirection(DcMotor.Direction.REVERSE);
+        br.setDirection(DcMotor.Direction.REVERSE);
         xrail.setDirection(DcMotor.Direction.REVERSE);
         lift.setDirection(DcMotor.Direction.FORWARD);
         lift2.setDirection(DcMotor.Direction.FORWARD);
@@ -82,11 +85,14 @@ public class Teleop extends OpMode {
             lift2.setPower(0.0f);
         }
 
-        if (gamepad1.a) {
-            claw.setPosition(-1.0);
-        } else {
-            claw.setPosition(1.0);
+        if (gamepad1.b) {
+            hook.setPosition(0.8);
+            telemetry.addData("Servo Position:", hook.getPosition());
+        } else if (gamepad1.a){
+            hook.setPosition(0);
+            telemetry.addData("Servo Position:", hook.getPosition());
         }
+
     }
 
 }
